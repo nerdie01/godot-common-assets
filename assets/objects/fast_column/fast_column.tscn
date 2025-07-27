@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://byier5i5df01e"]
 
-[ext_resource type="Material" uid="uid://d040r41udd3u3" path="res://assets/shaders/prototype_grid.tres" id="1_g6k1b"]
+[ext_resource type="Material" uid="uid://d040r41udd3u3" path="res://assets/objects/prototype_grid.tres" id="1_g6k1b"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_02hck"]
 

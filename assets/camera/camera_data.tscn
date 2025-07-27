@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dv5ws3pk78q4v"]
 
-[ext_resource type="Shader" uid="uid://bcmcyd31j6eqb" path="res://assets/shaders/camera/kuwahara.gdshader" id="1_wjmro"]
-[ext_resource type="Shader" uid="uid://dqtxrn61m40ww" path="res://assets/shaders/camera/dither.gdshader" id="2_pgu0o"]
+[ext_resource type="Shader" uid="uid://bcmcyd31j6eqb" path="res://assets/camera/shaders/kuwahara.gdshader" id="1_wjmro"]
+[ext_resource type="Shader" uid="uid://dqtxrn61m40ww" path="res://assets/camera/shaders/dither.gdshader" id="2_pgu0o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_24l82"]
 shader = ExtResource("1_wjmro")

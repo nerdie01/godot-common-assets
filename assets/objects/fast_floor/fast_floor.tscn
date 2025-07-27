@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://cguys1qvjcx3m"]
+
+[ext_resource type="Texture2D" uid="uid://hjds6jrh33r4" path="res://assets/objects/fast_floor/grid.png" id="1_rju3w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fwpuc"]
+albedo_texture = ExtResource("1_rju3w")
+metallic_specular = 0.0
+uv1_scale = Vector3(5, 5, 5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jjiol"]
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_jjiol"]
+
+[node name="FastFloor" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+layers = 65
+material_override = SubResource("StandardMaterial3D_fwpuc")
+mesh = SubResource("PlaneMesh_jjiol")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+shape = SubResource("HeightMapShape3D_jjiol")

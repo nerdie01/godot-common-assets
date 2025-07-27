@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://ssikgl1syt10"]
+
+[ext_resource type="Script" uid="uid://bebksw7nlh21e" path="res://assets/ui/scene_menu/scene_menu_button.gd" id="1_y3xf0"]
+
+[node name="Button" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "scene_menu_button"
+script = ExtResource("1_y3xf0")
+metadata/_edit_use_anchors_ = true

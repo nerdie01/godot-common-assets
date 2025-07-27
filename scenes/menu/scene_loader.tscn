@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7m5r1ae826b3"]
+
+[ext_resource type="Script" uid="uid://dgr1v8eka1drs" path="res://assets/ui/scene_menu/scene_menu.gd" id="1_kebsd"]
+[ext_resource type="PackedScene" uid="uid://ssikgl1syt10" path="res://assets/ui/scene_menu/scene_menu_button.tscn" id="2_lyk0x"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_kebsd")
+scene_menu_button = ExtResource("2_lyk0x")

@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://dv5ws3pk78q4v"]
+
+[ext_resource type="Shader" uid="uid://bcmcyd31j6eqb" path="res://assets/shaders/camera/kuwahara.gdshader" id="1_wjmro"]
+[ext_resource type="Shader" uid="uid://dqtxrn61m40ww" path="res://assets/shaders/camera/dither.gdshader" id="2_pgu0o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24l82"]
+shader = ExtResource("1_wjmro")
+shader_parameter/kernel_radius = 15.0
+shader_parameter/polynomial_weight_eta = 0.1
+shader_parameter/polynomial_weight_lambda = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v0rfm"]
+shader = ExtResource("2_pgu0o")
+shader_parameter/primary_color = Color(1, 1, 1, 1)
+shader_parameter/secondary_color = Color(0, 0, 0, 1)
+shader_parameter/levels = 3
+shader_parameter/max_color_range = 0.25
+shader_parameter/dither_scale = 1
+shader_parameter/dithering_intensity = 0.2
+shader_parameter/brightness = 2.5
+shader_parameter/contrast = 1.0
+
+[node name="CameraData" type="SubViewportContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 2
+
+[node name="CameraViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(576, 324)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="CameraViewport"]
+
+[node name="ShaderPasses" type="Node" parent="CameraViewport"]
+
+[node name="KuwaharaShader" type="ColorRect" parent="CameraViewport/ShaderPasses"]
+visible = false
+material = SubResource("ShaderMaterial_24l82")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="CameraViewport/ShaderPasses"]
+visible = false
+position = Vector2(576, 324)
+scale = Vector2(5.76, 3.24)
+copy_mode = 2
+
+[node name="DitherShader" type="ColorRect" parent="CameraViewport/ShaderPasses"]
+visible = false
+material = SubResource("ShaderMaterial_v0rfm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

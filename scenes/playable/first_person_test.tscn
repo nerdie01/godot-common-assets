@@ -1,0 +1,117 @@
+[gd_scene load_steps=12 format=3 uid="uid://bg4l14rt8jn2r"]
+
+[ext_resource type="PackedScene" uid="uid://cguys1qvjcx3m" path="res://assets/objects/fast_floor/fast_floor.tscn" id="1_1ittl"]
+[ext_resource type="Script" uid="uid://d1weinr3x7nj8" path="res://assets/camera/fpv/fpv_camera.gd" id="1_od3yb"]
+[ext_resource type="Shader" uid="uid://bcmcyd31j6eqb" path="res://assets/shaders/camera/kuwahara.gdshader" id="1_v0rfm"]
+[ext_resource type="Shader" uid="uid://dqtxrn61m40ww" path="res://assets/shaders/camera/dither.gdshader" id="2_24l82"]
+[ext_resource type="Script" uid="uid://bes2hutuvlxfk" path="res://assets/camera/fpv/fpv_camera_fov_change.gd" id="2_g3lmd"]
+[ext_resource type="Script" uid="uid://c5aqpfrrgbf85" path="res://assets/entity/character/physical_character.gd" id="5_bc7a5"]
+[ext_resource type="Script" uid="uid://bxkgwo3i4fvqf" path="res://assets/entity/components/entity_velocity_component.gd" id="6_bc7a5"]
+[ext_resource type="PackedScene" uid="uid://byier5i5df01e" path="res://assets/objects/fast_column/fast_column.tscn" id="6_fu6yi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24l82"]
+shader = ExtResource("1_v0rfm")
+shader_parameter/kernel_radius = 15.0
+shader_parameter/polynomial_weight_eta = 0.1
+shader_parameter/polynomial_weight_lambda = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v0rfm"]
+shader = ExtResource("2_24l82")
+shader_parameter/primary_color = Color(1, 1, 1, 1)
+shader_parameter/secondary_color = Color(0, 0, 0, 1)
+shader_parameter/levels = 3
+shader_parameter/max_color_range = 0.25
+shader_parameter/dither_scale = 1
+shader_parameter/dithering_intensity = 0.2
+shader_parameter/brightness = 2.5
+shader_parameter/contrast = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24l82"]
+radius = 0.25
+
+[node name="FirstPersonTest" type="Node3D"]
+
+[node name="CameraData" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 2
+
+[node name="CameraViewport" type="SubViewport" parent="CameraData"]
+handle_input_locally = false
+size = Vector2i(576, 324)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="CameraData/CameraViewport"]
+
+[node name="FirstPersonCamera" type="Node" parent="CameraData/CameraViewport" node_paths=PackedStringArray("camera", "target")]
+script = ExtResource("1_od3yb")
+camera = NodePath("../Camera3D")
+target = NodePath("../../../FirstPersonCharacter")
+camera_lerp_speed = 10.0
+sensitivity = 0.003
+debug_hide_mouse = true
+metadata/_custom_type_script = "uid://d1weinr3x7nj8"
+
+[node name="FirstPersonCameraFOVChange" type="Node" parent="CameraData/CameraViewport/FirstPersonCamera" node_paths=PackedStringArray("first_person_camera")]
+script = ExtResource("2_g3lmd")
+first_person_camera = NodePath("..")
+sprint_fov_multiplier = 1.5
+fov_lerp_speed = 3.0
+metadata/_custom_type_script = "uid://bes2hutuvlxfk"
+
+[node name="ShaderPasses" type="Node" parent="CameraData/CameraViewport"]
+
+[node name="KuwaharaShader" type="ColorRect" parent="CameraData/CameraViewport/ShaderPasses"]
+visible = false
+material = SubResource("ShaderMaterial_24l82")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="CameraData/CameraViewport/ShaderPasses"]
+visible = false
+position = Vector2(576, 324)
+scale = Vector2(5.76, 3.24)
+copy_mode = 2
+
+[node name="DitherShader" type="ColorRect" parent="CameraData/CameraViewport/ShaderPasses"]
+visible = false
+material = SubResource("ShaderMaterial_v0rfm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 0, 0)
+shadow_enabled = true
+
+[node name="FastFloor" parent="Environment" instance=ExtResource("1_1ittl")]
+
+[node name="FastColumn" parent="Environment" instance=ExtResource("6_fu6yi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="FastColumn2" parent="Environment" instance=ExtResource("6_fu6yi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="FirstPersonCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("velocity_component")]
+script = ExtResource("5_bc7a5")
+velocity_component = NodePath("EntityVelocityComponent")
+
+[node name="CharacterCollider" type="CollisionShape3D" parent="FirstPersonCharacter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_24l82")
+
+[node name="EntityVelocityComponent" type="Node" parent="FirstPersonCharacter"]
+script = ExtResource("6_bc7a5")
+sprint_speed = 260.0
+metadata/_custom_type_script = "uid://bxkgwo3i4fvqf"
